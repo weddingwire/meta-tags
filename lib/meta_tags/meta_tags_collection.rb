@@ -126,6 +126,18 @@ module MetaTags
       TextNormalizer.safe_join([prefix, separator, suffix], '')
     end
 
+    def extract_description
+      description = extract(:description).presence
+      return unless description
+      truncate = extract(:truncate)
+      truncate = true if truncate.nil? # defaulting to true
+
+      description = TextNormalizer.normalize_description(description)
+      description = TextNormalizer.truncate_description(description) if truncate === true
+
+      description
+    end
+
     # Extracts noindex settings as a Hash mapping noindex tag name to value.
     #
     # @return [Hash<String,String>] noindex attributes.

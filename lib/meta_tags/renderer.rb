@@ -20,7 +20,7 @@ module MetaTags
 
       render_charset(tags)
       render_title(tags)
-      render_with_normalization(tags, :description)
+      render_description(tags)
       render_with_normalization(tags, :keywords)
       render_refresh(tags)
       render_noindex(tags)
@@ -55,6 +55,16 @@ module MetaTags
       title = meta_tags.extract_full_title
       normalized_meta_tags[:title] = title
       tags << ContentTag.new(:title, :content => title) if title.present?
+    end
+
+    # Renders description tag.
+    #
+    # @param description tags a buffer object to store tag in.
+    #
+    def render_description(tags)
+      description = meta_tags.extract_description
+      normalized_meta_tags[:description] = description
+      tags << Tag.new(:meta, :name => 'description', :content => description) if description.present?
     end
 
     # Renders meta tag with normalization (should have a corresponding normalize_
